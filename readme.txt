@@ -1,4 +1,4 @@
-=== Menus ===
+=== Toggle Meta Boxes ===
 Contributors: D Sader
 Donate link: http://dsader.snowotherway.org
 Tags: menus, administration menus, admin menus, multisite, toggle meta boxes, edit form, edit, media buttons, quick edit,
