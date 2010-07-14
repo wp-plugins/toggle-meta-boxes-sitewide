@@ -6,7 +6,7 @@ Requires at least: 3.0
 Tested up to: 3.0
 Stable tag: Trunk
 
-WP3.0 multisite "mu-plugin" to toggle adminstration meta boxes for the entire network of sites. Just drop in mu-plugins.
+WP3.0 multisite "mu-plugin" to toggle administration meta boxes for the entire network of sites. Just drop in mu-plugins.
 
 == Description ==
 WP3 multisite mu-plugin. Go to Site Admin-->Options to "Enable Administration Meta Boxes". Meta boxes (post, page, and link edit forms, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links.
@@ -24,7 +24,7 @@ This section describes how to install the plugin and get it working.
 
 * Will this plugin also hide meta boxes added by plugins? No.
 * Will this plugin disable media buttons? Yes, but is already a Super Admin->Option.
-* Can I have different meta boxes for different roles of users on different blogs? No, this plugin toggles meta boxes for all users and all blogs regardless of Cap/Role (only SuperAdmin can overide the limits of the plugin however).
+* Can I have different meta boxes for different roles of users on different blogs? No, this plugin toggles meta boxes for all users and all blogs regardless of Cap/Role (only SuperAdmin can override the limits of the plugin however).
 
 == Screenshots ==
 
