@@ -1,5 +1,5 @@
 === Toggle Meta Boxes ===
-Contributors: D Sader
+Contributors: dsader
 Donate link: http://dsader.snowotherway.org
 Tags: menus, administration menus, admin menus, multisite, toggle meta boxes, edit form, edit, media buttons, quick edit,
 Requires at least: 3.0
