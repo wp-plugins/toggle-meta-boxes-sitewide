@@ -31,8 +31,10 @@ This section describes how to install the plugin and get it working.
 1. Meta Box Super Admin Options: Enable Administration Meta Boxes
 
 == Changelog ==
-= 3.0.0 = 
+= 3.0.1 = 
+* fixed typo allowing SuperAdmin override option with "extras"
 
+= 3.0.0 = 
 initial release
 
 == Upgrade Notice ==

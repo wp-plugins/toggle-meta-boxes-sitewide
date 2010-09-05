@@ -1,10 +1,10 @@
 <?php 
 /*
 Plugin Name: Toggle Meta Boxes Sitewide
-Plugin URI: http://dsader.snowotherway.org/wordpress-plugins/toggle-meta-boxes-sitewide/
+Plugin URI: http://wordpress.org/extend/plugins/toggle-meta-boxes-sitewide/
 Description: WP3 multisite mu-plugin. Go to Site Admin-->Options to "Enable Administration Meta Boxes". Meta boxes(post, page, link, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links.
-Author: D. Sader
-Version: 3.0
+Author: D Sader
+Version: 3.0.1
 Author URI: http://dsader.snowotherway.org
 
  This program is free software; you can redistribute it and/or modify
@@ -135,7 +135,7 @@ function ds_extras_remove() {
 	$menu_perms = get_site_option( "menu_items" );
 	if( is_array( $menu_perms ) == false )
 		$menu_perms = array();
-			if(( $menu_perms[ 'super_admin' ] != '1' ) && (is_super_admin()))
+			if(( $menu_perms[ 'super_admin_mb' ] != '1' ) && (is_super_admin()))
 			return;
 	// css trickery for Slug/Permalink/Short URL
  	if( $menu_perms[ 'edit_slug_box' ] != '1' ) 
