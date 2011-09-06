@@ -2,14 +2,14 @@
 Contributors: dsader
 Donate link: http://dsader.snowotherway.org
 Tags: menus, administration menus, admin menus, multisite, toggle meta boxes, edit form, edit, media buttons, quick edit,
-Requires at least: 3.0
-Tested up to: 3.0
+Requires at least: 3.2.1
+Tested up to: 3.2.1
 Stable tag: Trunk
 
-WP3.0 multisite "mu-plugin" to toggle administration meta boxes for the entire network of sites. Just drop in mu-plugins.
+WP3.0 multisite "mu-plugin" to toggle administration meta boxes for the entire network of sites. Install in mu-plugins.
 
 == Description ==
-WP3 multisite mu-plugin. Go to Site Admin-->Options to "Enable Administration Meta Boxes". Meta boxes (post, page, and link edit forms, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links.
+WP3 multisite mu-plugin. Go to Network Admin-->Settings to "Enable Administration Meta Boxes". Meta boxes (post, page, and link edit forms, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links.
 
 I use the plugin to simplify the various edit forms available to the entire network of sites. I use this plugin in a school(k-12) WP3 Multisite installation to simplify the Post, Page, Link, and Comment editing forms for student and faculty users.
 
@@ -18,7 +18,7 @@ I use the plugin to simplify the various edit forms available to the entire netw
 This section describes how to install the plugin and get it working.
 
 1. Upload `ds_wp3_toggle_meta_boxes.php` to the `/wp-content/mu-plugins/` directory
-2. Set multisite "Meta Boxes" option at SuperAdmin->Options page
+2. Set multisite "Meta Boxes" option at Network Admin->Settings page
 
 == Frequently Asked Questions ==
 
@@ -31,6 +31,9 @@ This section describes how to install the plugin and get it working.
 1. Meta Box Super Admin Options: Enable Administration Meta Boxes
 
 == Changelog ==
+= 3.0.3 = 
+* Tested up to: WP 3.2.1
+
 = 3.0.1 = 
 * fixed typo allowing SuperAdmin override option with "extras"
 

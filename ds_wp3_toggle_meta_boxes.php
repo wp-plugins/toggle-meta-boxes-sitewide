@@ -4,7 +4,7 @@ Plugin Name: Toggle Meta Boxes Sitewide
 Plugin URI: http://wordpress.org/extend/plugins/toggle-meta-boxes-sitewide/
 Description: WP3 multisite mu-plugin. Go to Site Admin-->Options to "Enable Administration Meta Boxes". Meta boxes(post, page, link, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links.
 Author: D Sader
-Version: 3.0.1
+Version: 3.0.3
 Author URI: http://dsader.snowotherway.org
 
  This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,8 @@ Author URI: http://dsader.snowotherway.org
 //---Hooks----------------------------------------------------------------//
 //------------------------------------------------------------------------//
 add_action( 'wpmu_options','ds_meta_box_option' ); // "Menu Settings->Enable Administration Menus->Plugins"
-add_action( 'admin_head', 'ds_toggle_meta_boxes' ); // toggle metaboxes
+add_action( 'admin_menu', 'ds_toggle_meta_boxes' ); // toggle metaboxes
+add_action( 'network_admin_menu', 'ds_toggle_meta_boxes' ); // toggle metaboxes TODO parse these options for network admin dashboard.
 add_action( 'admin_head', 'ds_extras_remove'  ); // toggle some extras
 
 //------------------------------------------------------------------------//
@@ -34,96 +35,119 @@ function ds_toggle_meta_boxes() {
 
 	$menu_perms = get_site_option( "menu_items" );
 
-	if(( $menu_perms[ 'super_admin_mb' ] != '1' ) && (is_super_admin())) 
+	if( !isset($menu_perms[ 'super_admin_mb' ] ) && is_network_admin()) 
 	return;
 	
 	/* POSTS edit-form-advanced.php	
 	 */
+		if( !isset($menu_perms[ 'format_mb' ]) ) 
+			remove_meta_box('formatdiv', $post_type, 'side');		
 
-		if( $menu_perms[ 'publish_mb' ] != '1' ) 
+
+		if( !isset($menu_perms[ 'publish_mb' ]) ) 
 			remove_meta_box('submitdiv', $post_type, 'side');		
 
-		if( $menu_perms[ 'tags_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'tags_mb' ]) ) 
 			remove_meta_box('tagsdiv-' . $tax_name, $post_type, 'side');
 
-		if( $menu_perms[ 'tax_cats_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'tax_cats_mb' ]) ) 
 			remove_meta_box($tax_name . 'div', $post_type, 'side');
 
-		if( $menu_perms[ 'cats_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'cats_mb' ]) ) 
 			remove_meta_box('categorydiv', $post_type, 'side');
 
-		if( $menu_perms[ 'att_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'att_mb' ]) ) 
 			remove_meta_box('pageparentdiv', $post_type, 'side');
 
-		if( $menu_perms[ 'feat_img_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'feat_img_mb' ]) ) 
 			remove_meta_box('postimagediv', $post_type, 'side');
 
-		if( $menu_perms[ 'excerpt_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'excerpt_mb' ]) ) 
 			remove_meta_box('postexcerpt', $post_type, 'normal');
 
-		if( $menu_perms[ 'track_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'track_mb' ]) ) 
 			remove_meta_box('trackbacksdiv', $post_type, 'normal');
 
-		if( $menu_perms[ 'custom_field_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'custom_field_mb' ]) ) 
 			remove_meta_box('postcustom', $post_type, 'normal');
 
-		if( $menu_perms[ 'disc_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'disc_mb' ]) ) 
 			remove_meta_box('commentstatusdiv', $post_type, 'normal');
 
-		if( $menu_perms[ 'slug_mb' ] != '1' ) {
+		if( !isset($menu_perms[ 'slug_mb' ]) ) {
 			remove_meta_box('slugdiv', $post_type, 'normal');
 	 	}
-		if( $menu_perms[ 'author_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'author_mb' ]) ) 
 			remove_meta_box('authordiv', $post_type, 'normal');
-		if( $menu_perms[ 'revs_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'revs_mb' ]) ) 
 			remove_meta_box('revisionsdiv', $post_type, 'normal'); // still saves aplenty unless redefined, though
 
-		if( $menu_perms[ 'comments_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'comments_mb' ]) ) 
 			remove_meta_box('commentsdiv', $post_type, 'normal');
 
 	/* LINKS edit-link-form.php
 	 */
 	if(current_user_can('manage_links')) {
-		if( $menu_perms[ 'link_save_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'link_save_mb' ]) ) 
 			remove_meta_box('linksubmitdiv', 'link', 'side');
-		if( $menu_perms[ 'link_cat_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'link_cat_mb' ]) ) 
 			remove_meta_box('linkcategorydiv', 'link', 'normal');
-		if( $menu_perms[ 'link_target_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'link_target_mb' ]) ) 
 			remove_meta_box('linktargetdiv', 'link', 'normal');
-		if( $menu_perms[ 'link_xfn_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'link_xfn_mb' ]) ) 
 			remove_meta_box('linkxfndiv', 'link', 'normal');
-		if( $menu_perms[ 'link_adv_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'link_adv_mb' ]) ) 
 			remove_meta_box('linkadvanceddiv', 'link', 'normal');
 	}
 
 	/* DASHBOARD dashboard.php
 	*/
 	if(current_user_can('read')) {
-		if( $menu_perms[ 'dash_prim_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'dash_prim_mb' ]) ) {
 			remove_meta_box('dashboard_primary', 'dashboard', 'side');
-		if( $menu_perms[ 'dash_sec_mb' ] != '1' ) 
+			remove_meta_box('dashboard_primary', 'dashboard-network', 'side');
+		}
+		if( !isset($menu_perms[ 'dash_sec_mb' ]) ) {
 			remove_meta_box('dashboard_secondary', 'dashboard', 'side');
-		if( $menu_perms[ 'dash_links_mb' ] != '1' ) 
+			remove_meta_box('dashboard_secondary', 'dashboard-network', 'side');
+		}
+		if( !isset($menu_perms[ 'dash_links_mb' ]) ) 
 			remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
-		if( $menu_perms[ 'dash_comments_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'dash_comments_mb' ]) ) 
 			remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
-		if( $menu_perms[ 'dash_right_now_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'dash_right_now_mb' ]) ) 
 			remove_meta_box('dashboard_right_now', 'dashboard', 'normal');
 	}
 	if ( current_user_can('edit_posts') ) {
-		if( $menu_perms[ 'dash_drafts_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'dash_drafts_mb' ]) ) 
 			remove_meta_box('dashboard_recent_drafts', 'dashboard', 'side');
-		if( $menu_perms[ 'dash_quick_mb' ] != '1' ) 
+		if( !isset($menu_perms[ 'dash_quick_mb' ]) ) 
 			remove_meta_box('dashboard_quick_press', 'dashboard', 'side');
 	}
-	if ( is_site_admin() && current_user_can( 'activate_plugins' ) ) {
-		if( $menu_perms[ 'dash_plug_mb' ] != '1' ) 
+	if ( is_network_admin() && current_user_can( 'activate_plugins' ) ) {
+		if( !isset($menu_perms[ 'dash_plug_mb' ]) ) 
 			remove_meta_box('dashboard_plugins', 'dashboard', 'normal');
+			remove_meta_box('dashboard_plugins', 'dashboard-network', 'normal');
 	}
 /* COMMENTS
 // TODO WP3.x doesn't make the comment editing form with meta_box similar to other edit forms
 */
 }
+/* Dashboards
+// WP3.1 has 3 custom dashboards for users, admins, and Network admins
+*/
+//Define the function which unsets the boxes
+function ds_remove_network_widgets() {
+        global $wp_meta_boxes;
+
+        # Remove "WordPress News"
+        unset($wp_meta_boxes['dashboard-network']['side']['core']['dashboard_primary']);
+        unset($wp_meta_boxes['dashboard-network']['side']['core']['dashboard_secondary']);
+        unset($wp_meta_boxes['dashboard-network']['normal']['core']['dashboard_primary']);
+        unset($wp_meta_boxes['dashboard-network']['normal']['core']['dashboard_secondary']);
+}
+// Now hook in to the action
+//add_action('wp_network_dashboard_setup', 'ds_remove_network_widgets', 20, 0);
 
 //------------------------------------------------------------------------//
 //--- Function to toggle extra administration cruft----------------------//
@@ -135,34 +159,34 @@ function ds_extras_remove() {
 	$menu_perms = get_site_option( "menu_items" );
 	if( is_array( $menu_perms ) == false )
 		$menu_perms = array();
-			if(( $menu_perms[ 'super_admin_mb' ] != '1' ) && (is_super_admin()))
+			if( !isset($menu_perms[ 'super_admin_mb' ] ) && is_network_admin())
 			return;
 	// css trickery for Slug/Permalink/Short URL
- 	if( $menu_perms[ 'edit_slug_box' ] != '1' ) 
+ 	if( !isset($menu_perms[ 'edit_slug_box' ]) ) 
 	 	echo '<style>#edit-slug-box { display:none;}</style>';
  	// css trickery for Screen Options and Help
-	if( $menu_perms[ 'screen_options_link' ] != '1' ) 
+	if( !isset($menu_perms[ 'screen_options_link' ]) ) 
 	 	echo '<style>#screen-options-link-wrap { display: none;}</style>';
- 	if( $menu_perms[ 'contextual_help_link' ] != '1' ) 
+ 	if( !isset($menu_perms[ 'contextual_help_link' ]) ) 
 	 	echo '<style>#contextual-help-link-wrap { display: none;}</style>';
 	// Quick Edit
  	//disable quickedit in post rows
- 	if( $menu_perms[ 'quick_edit_posts' ] != '1' ) 
+ 	if( !isset($menu_perms[ 'quick_edit_posts' ]) ) 
 		add_filter('post_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2); 
  	//disable quickedit in page rows
- 	if( $menu_perms[ 'quick_edit_pages' ] != '1' ) 
+ 	if( !isset($menu_perms[ 'quick_edit_pages' ]) ) 
 		add_filter('page_row_actions', create_function('$actions, $post', 'unset($actions["inline"]); return $actions ;'), 10, 2);
  	//disable quickedit in tag and category rows
- 	if( $menu_perms[ 'quick_edit_tags' ] != '1' ) 
+ 	if( !isset($menu_perms[ 'quick_edit_tags' ]) ) 
 		add_filter('tag_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
 	//disable quickedit in link rows
-	if( $menu_perms[ 'quick_edit_link_cats' ] != '1' ) 
+	if( !isset($menu_perms[ 'quick_edit_link_cats' ]) ) 
 		add_filter('link_cat_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
 	//disable quickedit in comment rows
-	if( $menu_perms[ 'quick_edit_comments' ] != '1' ) 
+	if( !isset($menu_perms[ 'quick_edit_comments' ]) ) 
 		add_filter('comment_row_actions', create_function('$actions, $post', 'unset($actions["quickedit"]); return $actions ;'), 10, 2);
 	// Media Buttons
-	if( $menu_perms[ 'media_buttons' ] != '1' ) 
+	if( !isset($menu_perms[ 'media_buttons' ]) ) 
 	 	remove_action( 'media_buttons', 'media_buttons' );
 }
 
@@ -189,6 +213,7 @@ function ds_meta_box_option() {
 		'quick_edit_comments'	=> __(  'Quick Edit Comments' ),
 
 //Meta Boxes
+		'format_mb'			=> __(	'Format' ),
 		'publish_mb'		=> __(	'Publish' ),
 		'tags_mb'			=> __(	'Tags' ),
 		'tax_cats_mb'		=> __(	'Taxonomy Categories' ),
@@ -220,7 +245,15 @@ function ds_meta_box_option() {
 
 ?>
 		<h3><?php _e( 'Meta Boxes' ); ?></h3>
-		<table id="menu" class="form-table">
+<?php
+/*
+global $wp_meta_boxes;
+echo '<pre>';
+print_r($wp_meta_boxes);
+echo '</pre>';
+*/
+?>
+ 		<table id="menu" class="form-table">
 			<tr valign="top">
 				<th scope="row"><?php _e( 'Enable Administration Meta Boxes' ); ?></th>
 				<td>
