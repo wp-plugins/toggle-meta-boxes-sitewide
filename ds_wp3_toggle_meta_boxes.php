@@ -4,7 +4,7 @@ Plugin Name: Toggle Meta Boxes Sitewide
 Plugin URI: http://wordpress.org/extend/plugins/toggle-meta-boxes-sitewide/
 Description: WP3 multisite mu-plugin. Go to Site Admin-->Options to "Enable Administration Meta Boxes". Meta boxes(post, page, link, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links.
 Author: D Sader
-Version: 3.0.3
+Version: 3.0.3.1
 Author URI: http://dsader.snowotherway.org
 
  This program is free software; you can redistribute it and/or modify
@@ -17,12 +17,14 @@ Author URI: http://dsader.snowotherway.org
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
  
-*/ 
+*/
+
+
 //------------------------------------------------------------------------//
 //---Hooks----------------------------------------------------------------//
 //------------------------------------------------------------------------//
 add_action( 'wpmu_options','ds_meta_box_option' ); // "Menu Settings->Enable Administration Menus->Plugins"
-add_action( 'admin_menu', 'ds_toggle_meta_boxes' ); // toggle metaboxes
+add_action( 'admin_head', 'ds_toggle_meta_boxes' ); // toggle metaboxes
 add_action( 'network_admin_menu', 'ds_toggle_meta_boxes' ); // toggle metaboxes TODO parse these options for network admin dashboard.
 add_action( 'admin_head', 'ds_extras_remove'  ); // toggle some extras
 
@@ -35,7 +37,7 @@ function ds_toggle_meta_boxes() {
 
 	$menu_perms = get_site_option( "menu_items" );
 
-	if( !isset($menu_perms[ 'super_admin_mb' ] ) && is_network_admin()) 
+	if( !isset($menu_perms[ 'super_admin_mb' ] ) && is_super_admin()) 
 	return;
 	
 	/* POSTS edit-form-advanced.php	
@@ -124,7 +126,7 @@ function ds_toggle_meta_boxes() {
 		if( !isset($menu_perms[ 'dash_quick_mb' ]) ) 
 			remove_meta_box('dashboard_quick_press', 'dashboard', 'side');
 	}
-	if ( is_network_admin() && current_user_can( 'activate_plugins' ) ) {
+	if ( is_super_admin() && current_user_can( 'activate_plugins' ) ) {
 		if( !isset($menu_perms[ 'dash_plug_mb' ]) ) 
 			remove_meta_box('dashboard_plugins', 'dashboard', 'normal');
 			remove_meta_box('dashboard_plugins', 'dashboard-network', 'normal');
@@ -159,7 +161,7 @@ function ds_extras_remove() {
 	$menu_perms = get_site_option( "menu_items" );
 	if( is_array( $menu_perms ) == false )
 		$menu_perms = array();
-			if( !isset($menu_perms[ 'super_admin_mb' ] ) && is_network_admin())
+			if( !isset($menu_perms[ 'super_admin_mb' ] ) && is_super_admin())
 			return;
 	// css trickery for Slug/Permalink/Short URL
  	if( !isset($menu_perms[ 'edit_slug_box' ]) ) 

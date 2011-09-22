@@ -31,6 +31,9 @@ This section describes how to install the plugin and get it working.
 1. Meta Box Super Admin Options: Enable Administration Meta Boxes
 
 == Changelog ==
+= 3.0.3.1 =
+* More testing up to: WP 3.2.1
+
 = 3.0.3 = 
 * Tested up to: WP 3.2.1
 
