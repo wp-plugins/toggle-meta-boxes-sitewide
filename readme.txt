@@ -5,6 +5,8 @@ Tags: menus, administration menus, admin menus, multisite, toggle meta boxes, ed
 Requires at least: 3.2.1
 Tested up to: 3.2.1
 Stable tag: Trunk
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 WP3.0 multisite "mu-plugin" to toggle administration meta boxes for the entire network of sites. Install in mu-plugins.
 
