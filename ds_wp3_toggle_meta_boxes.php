@@ -2,10 +2,11 @@
 /*
 Plugin Name: Toggle Meta Boxes Sitewide
 Plugin URI: http://wordpress.org/extend/plugins/toggle-meta-boxes-sitewide/
-Description: WP3 multisite mu-plugin. Go to Site Admin-->Options to "Enable Administration Meta Boxes". Meta boxes(post, page, link, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links.
+Version: 3.5
+Description: WP3.5 multisite network mu-plugin. Go to Network-->Settings to "Enable Administration Meta Boxes". Meta boxes(post, page, link, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links.
 Author: D Sader
-Version: 3.0.3.1
 Author URI: http://dsader.snowotherway.org
+Network: true
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -19,20 +20,39 @@ Author URI: http://dsader.snowotherway.org
  
 */
 
+class ds_meta {
 
-//------------------------------------------------------------------------//
-//---Hooks----------------------------------------------------------------//
-//------------------------------------------------------------------------//
-add_action( 'wpmu_options','ds_meta_box_option' ); // "Menu Settings->Enable Administration Menus->Plugins"
-add_action( 'admin_head', 'ds_toggle_meta_boxes' ); // toggle metaboxes
-add_action( 'network_admin_menu', 'ds_toggle_meta_boxes' ); // toggle metaboxes TODO parse these options for network admin dashboard.
-add_action( 'admin_head', 'ds_extras_remove'  ); // toggle some extras
+	function ds_meta() {
+	//------------------------------------------------------------------------//
+	//---Hooks----------------------------------------------------------------//
+	//------------------------------------------------------------------------//
+	add_action( 'wpmu_options', array(&$this, 'ds_meta_box_option' )); // "Menu Settings->Enable Administration Menus->Plugins"
+	add_action( 'admin_head', array(&$this, 'ds_toggle_meta_boxes' )); // toggle metaboxes
+	add_action( 'admin_head', array(&$this, 'ds_extras_remove'  )); // toggle some extras
+	add_action( 'wp_network_dashboard_setup', array(&$this, 'ds_remove_network_dashboard_widgets' ));
+	}
+	function ds_remove_network_dashboard_widgets() {
+	// Network Dashboard dashboard.php		
+		$menu_perms = get_site_option( "menu_items" );
 
-//------------------------------------------------------------------------//
-//---Functions to Enable/Disable admin menus------------------------------//
-//------------------------------------------------------------------------//
+		if( !isset($menu_perms[ 'dash_net_prim_mb' ]) ) {
+			remove_meta_box('dashboard_primary', 'dashboard-network', 'side');
+		}
+		if( !isset($menu_perms[ 'dash_net_sec_mb' ]) ) {
+			remove_meta_box('dashboard_secondary', 'dashboard-network', 'side');
+		}
+		if( !isset($menu_perms[ 'dash_net_plugins' ]) ) {
+			remove_meta_box( 'dashboard_plugins', 'dashboard-network', 'normal' );
+		}
+		if( !isset($menu_perms[ 'dash_net_right_now_mb' ]) ) {
+			remove_meta_box( 'network_dashboard_right_now', 'dashboard-network', 'normal' );
+		}
+	} 
 
-function ds_toggle_meta_boxes() {
+	//------------------------------------------------------------------------//
+	//---Functions to Enable/Disable admin menus------------------------------//
+	//------------------------------------------------------------------------//
+	function ds_toggle_meta_boxes() {
 		global $tax_name, $post_type;
 
 	$menu_perms = get_site_option( "menu_items" );
@@ -40,11 +60,10 @@ function ds_toggle_meta_boxes() {
 	if( !isset($menu_perms[ 'super_admin_mb' ] ) && is_super_admin()) 
 	return;
 	
-	/* POSTS edit-form-advanced.php	
-	 */
+	// POSTS edit-form-advanced.php	
+	 
 		if( !isset($menu_perms[ 'format_mb' ]) ) 
 			remove_meta_box('formatdiv', $post_type, 'side');		
-
 
 		if( !isset($menu_perms[ 'publish_mb' ]) ) 
 			remove_meta_box('submitdiv', $post_type, 'side');		
@@ -87,8 +106,7 @@ function ds_toggle_meta_boxes() {
 		if( !isset($menu_perms[ 'comments_mb' ]) ) 
 			remove_meta_box('commentsdiv', $post_type, 'normal');
 
-	/* LINKS edit-link-form.php
-	 */
+	// LINKS edit-link-form.php
 	if(current_user_can('manage_links')) {
 		if( !isset($menu_perms[ 'link_save_mb' ]) ) 
 			remove_meta_box('linksubmitdiv', 'link', 'side');
@@ -101,17 +119,14 @@ function ds_toggle_meta_boxes() {
 		if( !isset($menu_perms[ 'link_adv_mb' ]) ) 
 			remove_meta_box('linkadvanceddiv', 'link', 'normal');
 	}
-
-	/* DASHBOARD dashboard.php
-	*/
+	
+	// DASHBOARD dashboard.php
 	if(current_user_can('read')) {
 		if( !isset($menu_perms[ 'dash_prim_mb' ]) ) {
 			remove_meta_box('dashboard_primary', 'dashboard', 'side');
-			remove_meta_box('dashboard_primary', 'dashboard-network', 'side');
 		}
 		if( !isset($menu_perms[ 'dash_sec_mb' ]) ) {
 			remove_meta_box('dashboard_secondary', 'dashboard', 'side');
-			remove_meta_box('dashboard_secondary', 'dashboard-network', 'side');
 		}
 		if( !isset($menu_perms[ 'dash_links_mb' ]) ) 
 			remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
@@ -126,38 +141,13 @@ function ds_toggle_meta_boxes() {
 		if( !isset($menu_perms[ 'dash_quick_mb' ]) ) 
 			remove_meta_box('dashboard_quick_press', 'dashboard', 'side');
 	}
-	if ( is_super_admin() && current_user_can( 'activate_plugins' ) ) {
-		if( !isset($menu_perms[ 'dash_plug_mb' ]) ) 
-			remove_meta_box('dashboard_plugins', 'dashboard', 'normal');
-			remove_meta_box('dashboard_plugins', 'dashboard-network', 'normal');
 	}
-/* COMMENTS
-// TODO WP3.x doesn't make the comment editing form with meta_box similar to other edit forms
-*/
-}
-/* Dashboards
-// WP3.1 has 3 custom dashboards for users, admins, and Network admins
-*/
-//Define the function which unsets the boxes
-function ds_remove_network_widgets() {
-        global $wp_meta_boxes;
 
-        # Remove "WordPress News"
-        unset($wp_meta_boxes['dashboard-network']['side']['core']['dashboard_primary']);
-        unset($wp_meta_boxes['dashboard-network']['side']['core']['dashboard_secondary']);
-        unset($wp_meta_boxes['dashboard-network']['normal']['core']['dashboard_primary']);
-        unset($wp_meta_boxes['dashboard-network']['normal']['core']['dashboard_secondary']);
-}
-// Now hook in to the action
-//add_action('wp_network_dashboard_setup', 'ds_remove_network_widgets', 20, 0);
-
-//------------------------------------------------------------------------//
-//--- Function to toggle extra administration cruft----------------------//
-//----Note: Media buttons limit file types by default in ms-options.php --//
-//----"Quick Edit" inline editing: http://core.trac.wordpress.org/ticket/12940---//
-//------------------------------------------------------------------------//
-
-function ds_extras_remove() {
+	//------------------------------------------------------------------------//
+	//--- Function to toggle extra administration cruft----------------------//
+	//----"Quick Edit" inline editing: http://core.trac.wordpress.org/ticket/12940---//
+	//------------------------------------------------------------------------//
+	function ds_extras_remove() {
 	$menu_perms = get_site_option( "menu_items" );
 	if( is_array( $menu_perms ) == false )
 		$menu_perms = array();
@@ -177,7 +167,7 @@ function ds_extras_remove() {
 		add_filter('post_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2); 
  	//disable quickedit in page rows
  	if( !isset($menu_perms[ 'quick_edit_pages' ]) ) 
-		add_filter('page_row_actions', create_function('$actions, $post', 'unset($actions["inline"]); return $actions ;'), 10, 2);
+		add_filter('page_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
  	//disable quickedit in tag and category rows
  	if( !isset($menu_perms[ 'quick_edit_tags' ]) ) 
 		add_filter('tag_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
@@ -190,31 +180,31 @@ function ds_extras_remove() {
 	// Media Buttons
 	if( !isset($menu_perms[ 'media_buttons' ]) ) 
 	 	remove_action( 'media_buttons', 'media_buttons' );
-}
+	}
 
-//------------------------------------------------------------------------//
-//---Function SiteAdmin->Options------------------------------------------//
-//---Options are saved as site_options on wpmu-options.php page-----------//
-//------------------------------------------------------------------------//
-function ds_meta_box_option() {
+	//------------------------------------------------------------------------//
+	//---Function SiteAdmin->Options------------------------------------------//
+	//---Options are saved as site_options on wpmu-options.php page-----------//
+	//------------------------------------------------------------------------//
+	function ds_meta_box_option() {
 	$meta_perms = get_site_option( "menu_items" );
 	if( is_array( $meta_perms ) == false )
 		$meta_perms = array();
 			$meta_items = array(
 		'super_admin_mb'	=> __(  'Super Admin gets the following limited meta boxes, too?' ),
 
-//Extras
-		'edit_slug_box'			=> __(  'Edit Slug Box' ),
+	//Extras
 		'screen_options_link'	=> __(  'Screen Options Link' ),
 		'contextual_help_link'	=> __(  'Contextual Help Link' ),
-		'media_buttons'			=> __(  'Media Upload Buttons' ),
+		'edit_slug_box'			=> __(  'Edit Slug Box' ),
+		'media_buttons'			=> __(  'Add Media Button' ),
 		'quick_edit_posts'		=> __(  'Quick Edit Posts' ),
 		'quick_edit_pages'		=> __(  'Quick Edit Pages' ),
 		'quick_edit_tags'		=> __(  'Quick Edit Tags and Cats' ),
 		'quick_edit_link_cats'	=> __(  'Quick Edit Link Cats' ),
 		'quick_edit_comments'	=> __(  'Quick Edit Comments' ),
 
-//Meta Boxes
+	//Meta Boxes
 		'format_mb'			=> __(	'Format' ),
 		'publish_mb'		=> __(	'Publish' ),
 		'tags_mb'			=> __(	'Tags' ),
@@ -242,19 +232,13 @@ function ds_meta_box_option() {
 		'dash_right_now_mb'	=> __(	'Dashboard Right Now' ),
 		'dash_drafts_mb'	=> __(	'Dashboard Recent Drafts' ),
 		'dash_quick_mb'		=> __(	'Dashboard QuickPress' ),
-		'dash_plug_mb'		=> __(	'Dashboard Plugins' )
+		'dash_net_right_now_mb'	=> __(	'Network Dashboard Right Now' ),
+		'dash_net_prim_mb'		=> __(	'Network Dashboard Primary' ),
+		'dash_net_sec_mb'		=> __(	'Network Dashboard Secondary' ),
+		'dash_net_plugins'		=> __(	'Network Dashboard Plugins' ),
 			);
-
 ?>
 		<h3><?php _e( 'Meta Boxes' ); ?></h3>
-<?php
-/*
-global $wp_meta_boxes;
-echo '<pre>';
-print_r($wp_meta_boxes);
-echo '</pre>';
-*/
-?>
  		<table id="menu" class="form-table">
 			<tr valign="top">
 				<th scope="row"><?php _e( 'Enable Administration Meta Boxes' ); ?></th>
@@ -268,5 +252,9 @@ echo '</pre>';
 			</tr>
 		</table>	
 <?php
+}
+}
+if (class_exists("ds_meta")) {
+	$ds_meta = new ds_meta();	
 }
 ?>
