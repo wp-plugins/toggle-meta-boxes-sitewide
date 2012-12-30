@@ -27,12 +27,12 @@ This section describes how to install the plugin and get it working.
 == Frequently Asked Questions ==
 
 * Will this plugin also hide meta boxes added by plugins? No.
-* Will this plugin disable media buttons? Yes, but you'll need additional means to disable the uploaded entirely.
+* Will this plugin disable media buttons? Yes, but you'll need additional means to disable uploads entirely.
 * Can I have different meta boxes for different roles of users on different blogs? No, this plugin toggles meta boxes for all users and all blogs regardless of Cap/Role (SuperAdmin can override the limits of the plugin however).
 
 == Screenshots ==
 
-1. Meta Box Super Admin Options: Enable Administration Meta Boxes
+1. Meta Box Network->Settings: Enable Administration Meta Boxes
 
 == Changelog ==
 = 3.5 =
