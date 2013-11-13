@@ -2,8 +2,8 @@
 /*
 Plugin Name: Toggle Meta Boxes Sitewide
 Plugin URI: http://wordpress.org/extend/plugins/toggle-meta-boxes-sitewide/
-Version: 3.5
-Description: WP3.5 multisite network mu-plugin. Go to Network-->Settings to "Enable Administration Meta Boxes". Meta boxes(post, page, link, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links.
+Version: 3.7.1
+Description: WP3.7.1 multisite network mu-plugin. Go to Network-->Settings to "Enable Administration Meta Boxes". Meta boxes(post, page, link, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links. Toggle to Restrict Comment Editing to Editor+ roles. SuperAdmin comments can only be edited by a SuperAdmin.
 Author: D Sader
 Author URI: http://dsader.snowotherway.org
 Network: true
@@ -29,10 +29,101 @@ class ds_meta {
 	add_action( 'wpmu_options', array(&$this, 'ds_meta_box_option' )); // "Menu Settings->Enable Administration Menus->Plugins"
 	add_action( 'admin_head', array(&$this, 'ds_toggle_meta_boxes' )); // toggle metaboxes
 	add_action( 'admin_head', array(&$this, 'ds_extras_remove'  )); // toggle some extras
+	add_action( 'wp_dashboard_setup', array(&$this, 'ds_remove_dashboard_widgets' ));
 	add_action( 'wp_network_dashboard_setup', array(&$this, 'ds_remove_network_dashboard_widgets' ));
+	add_filter( 'comment_row_actions', array(&$this, 'ds_remove_comment_edit'), 1, 2); //Comment Editing Restricition
+	add_filter( 'map_meta_cap', array(&$this, 'ds_network_admin_restrict_comment_editing'), 10, 4 ); //Comment Editing Restricitons
+	add_action( 'admin_head-nav-menus.php', array(&$this, 'ds_nav_menus' ));
+//	add_filter( 'manage_nav-menus_columns', array(&$this, 'ds_nav_menu_manage_columns'),99 ); //not working yet: TODO
+}
+	function ds_nav_menu_manage_columns($array) {
+		//I want these advanced link properties hidden, better than this
+		$menu_perms = get_site_option( "menu_items" );
+		if( isset($menu_perms[ 'nav_menu_links_adv' ]) ) {
+
+	
+		$array = array(
+			'_title' => __('Show advanced menu properties'),
+			'cb' => '<input type="checkbox" />',
+			'link-target' => __('STJ Link Target'),
+			'css-classes' => __('CSS Classes'),
+			'xfn' => __('Link Relationship (XFN)'),
+			'description' => __('Description'),
+		);
+//			$user = wp_get_current_user();
+//			update_user_option($user->ID, 'managenav-menuscolumnshidden',
+//			array( 0 => 'link-target', 1 => 'css-classes', 2 => 'xfn', 3 => 'description', ), true);
+
+	return $array;
+	}
+}
+
+
+	function ds_nav_menus() {
+		// Menus nav-menus.php
+  		if( current_user_can( 'edit_theme_options' )) {
+ 			$menu_perms = get_site_option( "menu_items" );
+    		$screen = get_current_screen();  
+   	
+		if( !isset($menu_perms[ 'nav_menu_links' ]) ) 
+ 				remove_meta_box( 'add-custom-links', 'nav-menus','side' );
+
+ 		function ds_nav_menu_post_type_meta_boxes() {
+			$post_types = get_post_types( array( 'show_in_nav_menus' => true ), 'object' );
+				if ( ! $post_types )
+				return;
+
+			foreach ( $post_types as $post_type ) {
+				if ( $post_type ) {
+					$id = $post_type->name;
+ 				remove_meta_box("add-{$id}", 'nav-menus','side' );
+				}
+			}
+ 		}
+ 		
+		function ds_nav_menu_taxonomy_meta_boxes() {
+			$taxonomies = get_taxonomies( array( 'show_in_nav_menus' => true ), 'object' );
+				if ( !$taxonomies )
+				return;
+
+			foreach ( $taxonomies as $tax ) {
+				if ( $tax ) {
+					$id = $tax->name;
+				remove_meta_box("add-{$id}", 'nav-menus','side' );
+				}
+			}
+		} 
+		if( !isset($menu_perms[ 'nav_menu_pages' ]) ) ds_nav_menu_post_type_meta_boxes();
+ 		if( !isset($menu_perms[ 'nav_menu_cats' ]) ) ds_nav_menu_taxonomy_meta_boxes();
+    	}
+	}
+    
+	function ds_remove_dashboard_widgets() {	
+	// DASHBOARD /wp-admin/
+		$menu_perms = get_site_option( "menu_items" );
+		if(current_user_can('read')) {
+		if( !isset($menu_perms[ 'dash_prim_mb' ]) ) {
+			remove_meta_box('dashboard_primary', 'dashboard', 'side');
+		}
+		if( !isset($menu_perms[ 'dash_sec_mb' ]) ) {
+			remove_meta_box('dashboard_secondary', 'dashboard', 'side');
+		}
+		if( !isset($menu_perms[ 'dash_links_mb' ]) ) 
+			remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
+		if( !isset($menu_perms[ 'dash_comments_mb' ]) ) 
+			remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
+		if( !isset($menu_perms[ 'dash_right_now_mb' ]) ) 
+			remove_meta_box('dashboard_right_now', 'dashboard', 'normal');
+		}	
+		if ( current_user_can('edit_posts') ) {
+		if( !isset($menu_perms[ 'dash_drafts_mb' ]) ) 
+			remove_meta_box('dashboard_recent_drafts', 'dashboard', 'side');
+		if( !isset($menu_perms[ 'dash_quick_mb' ]) ) 
+			remove_meta_box('dashboard_quick_press', 'dashboard', 'side');
+		}
 	}
 	function ds_remove_network_dashboard_widgets() {
-	// Network Dashboard dashboard.php		
+	// Network Dashboard wp-admin/network/		
 		$menu_perms = get_site_option( "menu_items" );
 
 		if( !isset($menu_perms[ 'dash_net_prim_mb' ]) ) {
@@ -120,32 +211,12 @@ class ds_meta {
 			remove_meta_box('linkadvanceddiv', 'link', 'normal');
 	}
 	
-	// DASHBOARD dashboard.php
-	if(current_user_can('read')) {
-		if( !isset($menu_perms[ 'dash_prim_mb' ]) ) {
-			remove_meta_box('dashboard_primary', 'dashboard', 'side');
-		}
-		if( !isset($menu_perms[ 'dash_sec_mb' ]) ) {
-			remove_meta_box('dashboard_secondary', 'dashboard', 'side');
-		}
-		if( !isset($menu_perms[ 'dash_links_mb' ]) ) 
-			remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
-		if( !isset($menu_perms[ 'dash_comments_mb' ]) ) 
-			remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
-		if( !isset($menu_perms[ 'dash_right_now_mb' ]) ) 
-			remove_meta_box('dashboard_right_now', 'dashboard', 'normal');
-	}
-	if ( current_user_can('edit_posts') ) {
-		if( !isset($menu_perms[ 'dash_drafts_mb' ]) ) 
-			remove_meta_box('dashboard_recent_drafts', 'dashboard', 'side');
-		if( !isset($menu_perms[ 'dash_quick_mb' ]) ) 
-			remove_meta_box('dashboard_quick_press', 'dashboard', 'side');
-	}
 	}
 
 	//------------------------------------------------------------------------//
 	//--- Function to toggle extra administration cruft----------------------//
 	//----"Quick Edit" inline editing: http://core.trac.wordpress.org/ticket/12940---//
+	//----Comment Editing Restritions----------------------------------------//
 	//------------------------------------------------------------------------//
 	function ds_extras_remove() {
 	$menu_perms = get_site_option( "menu_items" );
@@ -168,20 +239,67 @@ class ds_meta {
  	//disable quickedit in page rows
  	if( !isset($menu_perms[ 'quick_edit_pages' ]) ) 
 		add_filter('page_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
- 	//disable quickedit in tag and category rows
- 	if( !isset($menu_perms[ 'quick_edit_tags' ]) ) 
+
+ 	//disable quickedit in any tag rows
+ 	if( !isset($menu_perms[ 'quick_edit_tag' ]) ) 
 		add_filter('tag_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
-	//disable quickedit in link rows
-	if( !isset($menu_perms[ 'quick_edit_link_cats' ]) ) 
-		add_filter('link_cat_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
+ 	//disable quickedit in taxonomy=post_tag rows
+ 	if( !isset($menu_perms[ 'quick_edit_post_tag' ]) ) 
+		add_filter('post_tag_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
+ 	//disable quickedit in taxonomy=category rows
+ 	if( !isset($menu_perms[ 'quick_edit_category' ]) ) 
+		add_filter('category_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
+	//disable quickedit in taxonomy=link_category rows
+	if( !isset($menu_perms[ 'quick_edit_link_category' ]) ) 
+		add_filter('link_category_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
+
 	//disable quickedit in comment rows
 	if( !isset($menu_perms[ 'quick_edit_comments' ]) ) 
 		add_filter('comment_row_actions', create_function('$actions, $post', 'unset($actions["quickedit"]); return $actions ;'), 10, 2);
 	// Media Buttons
 	if( !isset($menu_perms[ 'media_buttons' ]) ) 
 	 	remove_action( 'media_buttons', 'media_buttons' );
+	
+	//Welcome Panel
+	if( !isset($menu_perms[ 'welcome_panel' ]) ) 
+	 	remove_action( 'welcome_panel', 'wp_welcome_panel' );
 	}
 
+	//Comment Editing Restrictions
+	// http://scribu.net/wordpress/prevent-blog-authors-from-editing-comments.html
+	function ds_network_admin_restrict_comment_editing( $caps, $cap, $user_id, $args ) {
+		$menu_perms = get_site_option( "menu_items" );
+
+		if( isset($menu_perms[ 'comment_edit' ]) ) {
+
+			if ( 'edit_comment' == $cap ) {
+				$comment = get_comment( $args[0] );
+  			
+			if ( is_super_admin( $comment->user_id ) )
+				$caps[] = 'manage_network'; //NetworkAdmin is only role that can edit this comment - no user can approve or trash it either!
+			if ( ! is_super_admin( $comment->user_id ) && $comment->user_id != $user_id ) 
+				$caps[] = 'moderate_comments'; //NetworkAdmin, Admins, Editors roles can edit others comments
+			}
+		}
+		return $caps;
+	}
+
+    function ds_remove_comment_edit($actions, $comment) {
+		$menu_perms = get_site_option( "menu_items" );
+		if( !isset($menu_perms[ 'super_admin_mb' ] ) && is_super_admin()) 
+		return;
+		
+		if( isset($menu_perms[ 'comment_edit' ]) ) {
+
+        	$user_id = get_current_user_id();
+        	if ($comment->user_id != $user_id) {
+            	unset($actions['edit']); // edit link appears only on own comments
+            	unset($actions['quickedit']); //quickedit may already be toggled for all roles
+        	}
+		}
+        return $actions;
+   }
+    
 	//------------------------------------------------------------------------//
 	//---Function SiteAdmin->Options------------------------------------------//
 	//---Options are saved as site_options on wpmu-options.php page-----------//
@@ -192,18 +310,11 @@ class ds_meta {
 		$meta_perms = array();
 			$meta_items = array(
 		'super_admin_mb'	=> __(  'Super Admin gets the following limited meta boxes, too?' ),
-
 	//Extras
 		'screen_options_link'	=> __(  'Screen Options Link' ),
 		'contextual_help_link'	=> __(  'Contextual Help Link' ),
 		'edit_slug_box'			=> __(  'Edit Slug Box' ),
 		'media_buttons'			=> __(  'Add Media Button' ),
-		'quick_edit_posts'		=> __(  'Quick Edit Posts' ),
-		'quick_edit_pages'		=> __(  'Quick Edit Pages' ),
-		'quick_edit_tags'		=> __(  'Quick Edit Tags and Cats' ),
-		'quick_edit_link_cats'	=> __(  'Quick Edit Link Cats' ),
-		'quick_edit_comments'	=> __(  'Quick Edit Comments' ),
-
 	//Meta Boxes
 		'format_mb'			=> __(	'Format' ),
 		'publish_mb'		=> __(	'Publish' ),
@@ -225,6 +336,13 @@ class ds_meta {
 		'link_target_mb'	=> __(	'Link Target' ),
 		'link_xfn_mb'		=> __(	'Link Relationship (XFN)' ),
 		'link_adv_mb'		=> __(	'Link Advanced' ),
+		
+		'nav_menu_links'		=> __(	'Appearance Menu Links' ),
+		'nav_menu_links_adv'		=> __(	'Appearance Menu Link Show Advanced Properties' ),
+		'nav_menu_pages'		=> __(	'Appearance Menu Pages' ),
+		'nav_menu_cats'		=> __(	'Appearance Menu Categories' ),
+
+		'welcome_panel'		=> __(	'Welcome Panel' ),
 		'dash_prim_mb'		=> __(	'Dashboard Primary' ),
 		'dash_sec_mb'		=> __(	'Dashboard Secondary' ),
 		'dash_links_mb'		=> __(	'Dashboard Incoming Links' ),
@@ -236,6 +354,15 @@ class ds_meta {
 		'dash_net_prim_mb'		=> __(	'Network Dashboard Primary' ),
 		'dash_net_sec_mb'		=> __(	'Network Dashboard Secondary' ),
 		'dash_net_plugins'		=> __(	'Network Dashboard Plugins' ),
+		'quick_edit_posts'		=> __(  'Quick Edit Posts' ),
+		'quick_edit_pages'		=> __(  'Quick Edit Pages' ),
+		'quick_edit_tag'		=> __(  'Quick Edit Any Tag' ),
+		'quick_edit_post_tag'		=> __(  'Quick Edit Post Tag' ),
+		'quick_edit_category'		=> __(  'Quick Edit Post Category' ),
+		'quick_edit_link_category'	=> __(  'Quick Edit Link Category' ),
+		'quick_edit_comments'	=> __(  'Quick Edit Comments' ),
+		'comment_edit'		=> __(  'Restrict Comment Editing' ),
+
 			);
 ?>
 		<h3><?php _e( 'Meta Boxes' ); ?></h3>
