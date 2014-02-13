@@ -1,0 +1,240 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Toggle Meta Boxes Sitewide\n"
+"POT-Creation-Date: 2014-01-22 22:43-0700\n"
+"PO-Revision-Date: 2014-01-24 11:28+0100\n"
+"Last-Translator: jelena kovacevic <jecajeca260@gmail.com>\n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: ds_wp3_toggle_meta_boxes.php:52
+msgid "Show advanced menu properties"
+msgstr "Mostrar Propiedades avanzadas del Menú"
+
+#: ds_wp3_toggle_meta_boxes.php:54
+msgid "STJ Link Target"
+msgstr "Destino del Enlace STJ"
+
+#: ds_wp3_toggle_meta_boxes.php:55
+msgid "CSS Classes"
+msgstr "Clases CSS"
+
+#: ds_wp3_toggle_meta_boxes.php:56 ds_wp3_toggle_meta_boxes.php:343
+msgid "Link Relationship (XFN)"
+msgstr "Relaciones de los vínculos (XFN)"
+
+#: ds_wp3_toggle_meta_boxes.php:57
+msgid "Description"
+msgstr "Descripción"
+
+#: ds_wp3_toggle_meta_boxes.php:318
+msgid "Super Admin gets the following limited meta boxes, too?"
+msgstr ""
+"¿Super administrador obtiene las siguientes meta boxes limitadas, también?"
+
+#: ds_wp3_toggle_meta_boxes.php:320
+msgid "Screen Options Link"
+msgstr "Enlace de Opciones de Pantalla"
+
+#: ds_wp3_toggle_meta_boxes.php:321
+msgid "Contextual Help Link"
+msgstr "Enlace de Ayuda Contextual"
+
+#: ds_wp3_toggle_meta_boxes.php:322
+msgid "Edit Slug Box"
+msgstr "Editar Slugs Box"
+
+#: ds_wp3_toggle_meta_boxes.php:323
+msgid "Add Media Button"
+msgstr "Añadir Botón de Medios"
+
+#: ds_wp3_toggle_meta_boxes.php:325
+msgid "Format"
+msgstr "Formato"
+
+#: ds_wp3_toggle_meta_boxes.php:326
+msgid "Publish"
+msgstr "Publicar"
+
+#: ds_wp3_toggle_meta_boxes.php:327
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: ds_wp3_toggle_meta_boxes.php:328
+msgid "Taxonomy Categories"
+msgstr "Categorías de Taxonomía"
+
+#: ds_wp3_toggle_meta_boxes.php:329
+msgid "Categories"
+msgstr "Categorías"
+
+#: ds_wp3_toggle_meta_boxes.php:330
+msgid "Attributes"
+msgstr "Atributos"
+
+#: ds_wp3_toggle_meta_boxes.php:331
+msgid "Featured Image"
+msgstr "Foto principal"
+
+#: ds_wp3_toggle_meta_boxes.php:332
+msgid "Excerpt"
+msgstr "Extracto"
+
+#: ds_wp3_toggle_meta_boxes.php:333
+msgid "Send Trackbacks"
+msgstr "Enviar TrackBacks"
+
+#: ds_wp3_toggle_meta_boxes.php:334
+msgid "Custom Fields"
+msgstr "Campos Personalizados"
+
+#: ds_wp3_toggle_meta_boxes.php:335
+msgid "Discussion"
+msgstr "Discusión"
+
+#: ds_wp3_toggle_meta_boxes.php:336
+msgid "Slug"
+msgstr "Slug"
+
+#: ds_wp3_toggle_meta_boxes.php:337
+msgid "Author"
+msgstr "Autor"
+
+#: ds_wp3_toggle_meta_boxes.php:338
+msgid "Revisions"
+msgstr "Revisiones"
+
+#: ds_wp3_toggle_meta_boxes.php:339
+msgid "Comments"
+msgstr "Comentarios"
+
+#: ds_wp3_toggle_meta_boxes.php:340
+msgid "Link Save"
+msgstr "Guardar Enlace "
+
+#: ds_wp3_toggle_meta_boxes.php:341
+msgid "Link Categories"
+msgstr "Categorías de Enlace "
+
+#: ds_wp3_toggle_meta_boxes.php:342
+msgid "Link Target"
+msgstr "Destino del Enlace"
+
+#: ds_wp3_toggle_meta_boxes.php:344
+msgid "Link Advanced"
+msgstr "Link Avanzado"
+
+#: ds_wp3_toggle_meta_boxes.php:346
+msgid "Appearance Menu Links"
+msgstr "Apariencia de Enlaces de Menú "
+
+#: ds_wp3_toggle_meta_boxes.php:347
+msgid "Appearance Menu Link Show Advanced Properties"
+msgstr "Apariencia de Enlaces de Menú Mostrar Propiedades Avanzadas"
+
+#: ds_wp3_toggle_meta_boxes.php:348
+msgid "Appearance Menu Pages"
+msgstr "Páginas Apariencia del Menú "
+
+#: ds_wp3_toggle_meta_boxes.php:349
+msgid "Appearance Menu Categories"
+msgstr "Categorías del menú Apariencia"
+
+#: ds_wp3_toggle_meta_boxes.php:351
+msgid "Welcome Panel"
+msgstr "Panel de Bienvenida"
+
+#: ds_wp3_toggle_meta_boxes.php:352
+msgid "Dashboard Primary"
+msgstr "Tablero Primario"
+
+#: ds_wp3_toggle_meta_boxes.php:353
+msgid "Dashboard Secondary"
+msgstr "Tablero Secundario"
+
+#: ds_wp3_toggle_meta_boxes.php:354
+msgid "Dashboard Incoming Links"
+msgstr "Enlaces Entrantes Tablero"
+
+#: ds_wp3_toggle_meta_boxes.php:355
+msgid "Dashboard Recent Comments"
+msgstr "Comentarios recient esTablero"
+
+#: ds_wp3_toggle_meta_boxes.php:356
+msgid "Dashboard Right Now"
+msgstr "Tablero  Ahora"
+
+#: ds_wp3_toggle_meta_boxes.php:357
+msgid "Dashboard Recent Drafts"
+msgstr "Borradores recientes Tablero"
+
+#: ds_wp3_toggle_meta_boxes.php:358
+msgid "Dashboard QuickPress"
+msgstr "Tablero  QuickPress"
+
+#: ds_wp3_toggle_meta_boxes.php:359
+msgid "Network Dashboard Right Now"
+msgstr "Tablero de Red Ahora"
+
+#: ds_wp3_toggle_meta_boxes.php:360
+msgid "Network Dashboard Primary"
+msgstr "Tablero de Red Primario"
+
+#: ds_wp3_toggle_meta_boxes.php:361
+msgid "Network Dashboard Secondary"
+msgstr "Tablero Red Secundario"
+
+#: ds_wp3_toggle_meta_boxes.php:362
+msgid "Network Dashboard Plugins"
+msgstr "Plugin Tablero de Red "
+
+#: ds_wp3_toggle_meta_boxes.php:363
+msgid "Quick Edit Posts"
+msgstr "Edición Rápida Publicaciones"
+
+#: ds_wp3_toggle_meta_boxes.php:364
+msgid "Quick Edit Pages"
+msgstr "Edición Rapida Páginas"
+
+#: ds_wp3_toggle_meta_boxes.php:365
+msgid "Quick Edit Any Tag"
+msgstr "Edición Rápida cualquier etiqueta"
+
+#: ds_wp3_toggle_meta_boxes.php:366
+msgid "Quick Edit Post Tag"
+msgstr "Edición rápida Etiqueta Publicación"
+
+#: ds_wp3_toggle_meta_boxes.php:367
+msgid "Quick Edit Post Category"
+msgstr "Edición Rápidat Categoría Publicación"
+
+#: ds_wp3_toggle_meta_boxes.php:368
+msgid "Quick Edit Link Category"
+msgstr "Edición Rápidat Categoría Enlace"
+
+#: ds_wp3_toggle_meta_boxes.php:369
+msgid "Quick Edit Comments"
+msgstr "Ediciónr Rápida Comentarios"
+
+#: ds_wp3_toggle_meta_boxes.php:370
+msgid "Restrict Comment Editing"
+msgstr "Restringir Edición de Comentarios"
+
+#: ds_wp3_toggle_meta_boxes.php:374
+msgid "Meta Boxes"
+msgstr "Cajas Meta"
+
+#: ds_wp3_toggle_meta_boxes.php:377
+msgid "Enable Administration Meta Boxes"
+msgstr "Habilitar la administración Cajas Meta"

@@ -2,8 +2,8 @@
 /*
 Plugin Name: Toggle Meta Boxes Sitewide
 Plugin URI: http://wordpress.org/extend/plugins/toggle-meta-boxes-sitewide/
-Version: 3.7.1
-Description: WP3.7.1 multisite network mu-plugin. Go to Network-->Settings to "Enable Administration Meta Boxes". Meta boxes(post, page, link, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links. Toggle to Restrict Comment Editing to Editor+ roles. SuperAdmin comments can only be edited by a SuperAdmin.
+Version: 3.8.1
+Description: WP3.8.1 multisite network mu-plugin. Go to Network-->Settings to "Enable Administration Meta Boxes". Meta boxes(post, page, link, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links. Toggle to Restrict Comment Editing to Editor+ roles. SuperAdmin comments can only be edited by a SuperAdmin.
 Author: D Sader
 Author URI: http://dsader.snowotherway.org
 Network: true
@@ -21,11 +21,15 @@ Network: true
 */
 
 class ds_meta {
+		var $l10n_prefix;
 
 	function ds_meta() {
+			$this->l10n_prefix = 'toggle-meta-boxes-sitewide';
+
 	//------------------------------------------------------------------------//
 	//---Hooks----------------------------------------------------------------//
 	//------------------------------------------------------------------------//
+	add_action( 'admin_init', array(&$this, 'ds_localization_init' ));
 	add_action( 'wpmu_options', array(&$this, 'ds_meta_box_option' )); // "Menu Settings->Enable Administration Menus->Plugins"
 	add_action( 'admin_head', array(&$this, 'ds_toggle_meta_boxes' )); // toggle metaboxes
 	add_action( 'admin_head', array(&$this, 'ds_extras_remove'  )); // toggle some extras
@@ -35,7 +39,14 @@ class ds_meta {
 	add_filter( 'map_meta_cap', array(&$this, 'ds_network_admin_restrict_comment_editing'), 10, 4 ); //Comment Editing Restricitons
 	add_action( 'admin_head-nav-menus.php', array(&$this, 'ds_nav_menus' ));
 //	add_filter( 'manage_nav-menus_columns', array(&$this, 'ds_nav_menu_manage_columns'),99 ); //not working yet: TODO
+	
 }
+
+
+	function ds_localization_init() {
+		load_plugin_textdomain( 'toggle-meta-boxes-sitewide', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	}
+
 	function ds_nav_menu_manage_columns($array) {
 		//I want these advanced link properties hidden, better than this
 		$menu_perms = get_site_option( "menu_items" );
@@ -45,7 +56,7 @@ class ds_meta {
 		$array = array(
 			'_title' => __('Show advanced menu properties'),
 			'cb' => '<input type="checkbox" />',
-			'link-target' => __('STJ Link Target'),
+			'link-target' => __('Link Target'),
 			'css-classes' => __('CSS Classes'),
 			'xfn' => __('Link Relationship (XFN)'),
 			'description' => __('Description'),
@@ -309,66 +320,66 @@ class ds_meta {
 	if( is_array( $meta_perms ) == false )
 		$meta_perms = array();
 			$meta_items = array(
-		'super_admin_mb'	=> __(  'Super Admin gets the following limited meta boxes, too?' ),
+		'super_admin_mb'	=> __(  'Super Admin gets the following limited meta boxes, too?', $this->l10n_prefix ),
 	//Extras
-		'screen_options_link'	=> __(  'Screen Options Link' ),
-		'contextual_help_link'	=> __(  'Contextual Help Link' ),
-		'edit_slug_box'			=> __(  'Edit Slug Box' ),
-		'media_buttons'			=> __(  'Add Media Button' ),
+		'screen_options_link'	=> __(  'Screen Options Link', $this->l10n_prefix ),
+		'contextual_help_link'	=> __(  'Contextual Help Link', $this->l10n_prefix ),
+		'edit_slug_box'			=> __(  'Edit Slug Box', $this->l10n_prefix ),
+		'media_buttons'			=> __(  'Add Media Button', $this->l10n_prefix ),
 	//Meta Boxes
-		'format_mb'			=> __(	'Format' ),
-		'publish_mb'		=> __(	'Publish' ),
-		'tags_mb'			=> __(	'Tags' ),
-		'tax_cats_mb'		=> __(	'Taxonomy Categories' ),
-		'cats_mb'			=> __(	'Categories' ),
-		'att_mb'			=> __(	'Attributes' ),
-		'feat_img_mb'		=> __(	'Featured Image' ),
-		'excerpt_mb'		=> __(	'Excerpt' ),
-		'track_mb'			=> __(	'Send Trackbacks' ),
-		'custom_field_mb'	=> __(	'Custom Fields' ),
-		'disc_mb'			=> __(	'Discussion' ),
-		'slug_mb'			=> __(	'Slug' ),
-		'author_mb'			=> __(	'Author' ),
-		'revs_mb'			=> __(	'Revisions' ),
-		'comments_mb'		=> __(	'Comments' ),
-		'link_save_mb'		=> __(	'Link Save' ),
-		'link_cat_mb'		=> __(	'Link Categories' ),
-		'link_target_mb'	=> __(	'Link Target' ),
-		'link_xfn_mb'		=> __(	'Link Relationship (XFN)' ),
-		'link_adv_mb'		=> __(	'Link Advanced' ),
+		'format_mb'			=> __(	'Format', $this->l10n_prefix ),
+		'publish_mb'		=> __(	'Publish', $this->l10n_prefix ),
+		'tags_mb'			=> __(	'Tags', $this->l10n_prefix ),
+		'tax_cats_mb'		=> __(	'Taxonomy Categories', $this->l10n_prefix ),
+		'cats_mb'			=> __(	'Categories', $this->l10n_prefix ),
+		'att_mb'			=> __(	'Attributes', $this->l10n_prefix ),
+		'feat_img_mb'		=> __(	'Featured Image', $this->l10n_prefix ),
+		'excerpt_mb'		=> __(	'Excerpt', $this->l10n_prefix ),
+		'track_mb'			=> __(	'Send Trackbacks', $this->l10n_prefix ),
+		'custom_field_mb'	=> __(	'Custom Fields', $this->l10n_prefix ),
+		'disc_mb'			=> __(	'Discussion', $this->l10n_prefix ),
+		'slug_mb'			=> __(	'Slug', $this->l10n_prefix ),
+		'author_mb'			=> __(	'Author', $this->l10n_prefix ),
+		'revs_mb'			=> __(	'Revisions', $this->l10n_prefix ),
+		'comments_mb'		=> __(	'Comments', $this->l10n_prefix ),
+		'link_save_mb'		=> __(	'Link Save', $this->l10n_prefix ),
+		'link_cat_mb'		=> __(	'Link Categories', $this->l10n_prefix ),
+		'link_target_mb'	=> __(	'Link Target', $this->l10n_prefix ),
+		'link_xfn_mb'		=> __(	'Link Relationship (XFN)', $this->l10n_prefix ),
+		'link_adv_mb'		=> __(	'Link Advanced', $this->l10n_prefix ),
 		
-		'nav_menu_links'		=> __(	'Appearance Menu Links' ),
-		'nav_menu_links_adv'		=> __(	'Appearance Menu Link Show Advanced Properties' ),
-		'nav_menu_pages'		=> __(	'Appearance Menu Pages' ),
-		'nav_menu_cats'		=> __(	'Appearance Menu Categories' ),
+		'nav_menu_links'		=> __(	'Appearance Menu Links', $this->l10n_prefix ),
+		'nav_menu_links_adv'		=> __(	'Appearance Menu Link Show Advanced Properties', $this->l10n_prefix ),
+		'nav_menu_pages'		=> __(	'Appearance Menu Pages', $this->l10n_prefix ),
+		'nav_menu_cats'		=> __(	'Appearance Menu Categories', $this->l10n_prefix ),
 
-		'welcome_panel'		=> __(	'Welcome Panel' ),
-		'dash_prim_mb'		=> __(	'Dashboard Primary' ),
-		'dash_sec_mb'		=> __(	'Dashboard Secondary' ),
-		'dash_links_mb'		=> __(	'Dashboard Incoming Links' ),
-		'dash_comments_mb'	=> __(	'Dashboard Recent Comments' ),
-		'dash_right_now_mb'	=> __(	'Dashboard Right Now' ),
-		'dash_drafts_mb'	=> __(	'Dashboard Recent Drafts' ),
-		'dash_quick_mb'		=> __(	'Dashboard QuickPress' ),
-		'dash_net_right_now_mb'	=> __(	'Network Dashboard Right Now' ),
-		'dash_net_prim_mb'		=> __(	'Network Dashboard Primary' ),
-		'dash_net_sec_mb'		=> __(	'Network Dashboard Secondary' ),
-		'dash_net_plugins'		=> __(	'Network Dashboard Plugins' ),
-		'quick_edit_posts'		=> __(  'Quick Edit Posts' ),
-		'quick_edit_pages'		=> __(  'Quick Edit Pages' ),
-		'quick_edit_tag'		=> __(  'Quick Edit Any Tag' ),
-		'quick_edit_post_tag'		=> __(  'Quick Edit Post Tag' ),
-		'quick_edit_category'		=> __(  'Quick Edit Post Category' ),
-		'quick_edit_link_category'	=> __(  'Quick Edit Link Category' ),
-		'quick_edit_comments'	=> __(  'Quick Edit Comments' ),
-		'comment_edit'		=> __(  'Restrict Comment Editing' ),
+		'welcome_panel'		=> __(	'Welcome Panel', $this->l10n_prefix ),
+		'dash_prim_mb'		=> __(	'Dashboard Primary', $this->l10n_prefix ),
+		'dash_sec_mb'		=> __(	'Dashboard Secondary', $this->l10n_prefix ),
+		'dash_links_mb'		=> __(	'Dashboard Incoming Links', $this->l10n_prefix ),
+		'dash_comments_mb'	=> __(	'Dashboard Recent Comments', $this->l10n_prefix ),
+		'dash_right_now_mb'	=> __(	'Dashboard Right Now', $this->l10n_prefix ),
+		'dash_drafts_mb'	=> __(	'Dashboard Recent Drafts', $this->l10n_prefix ),
+		'dash_quick_mb'		=> __(	'Dashboard QuickPress', $this->l10n_prefix ),
+		'dash_net_right_now_mb'	=> __(	'Network Dashboard Right Now', $this->l10n_prefix ),
+		'dash_net_prim_mb'		=> __(	'Network Dashboard Primary', $this->l10n_prefix ),
+		'dash_net_sec_mb'		=> __(	'Network Dashboard Secondary', $this->l10n_prefix ),
+		'dash_net_plugins'		=> __(	'Network Dashboard Plugins', $this->l10n_prefix ),
+		'quick_edit_posts'		=> __(  'Quick Edit Posts', $this->l10n_prefix ),
+		'quick_edit_pages'		=> __(  'Quick Edit Pages', $this->l10n_prefix ),
+		'quick_edit_tag'		=> __(  'Quick Edit Any Tag', $this->l10n_prefix ),
+		'quick_edit_post_tag'		=> __(  'Quick Edit Post Tag', $this->l10n_prefix ),
+		'quick_edit_category'		=> __(  'Quick Edit Post Category', $this->l10n_prefix ),
+		'quick_edit_link_category'	=> __(  'Quick Edit Link Category', $this->l10n_prefix ),
+		'quick_edit_comments'	=> __(  'Quick Edit Comments', $this->l10n_prefix ),
+		'comment_edit'		=> __(  'Restrict Comment Editing', $this->l10n_prefix ),
 
 			);
 ?>
-		<h3><?php _e( 'Meta Boxes' ); ?></h3>
+		<h3><?php _e( 'Meta Boxes', $this->l10n_prefix ); ?></h3>
  		<table id="menu" class="form-table">
 			<tr valign="top">
-				<th scope="row"><?php _e( 'Enable Administration Meta Boxes' ); ?></th>
+				<th scope="row"><?php _e( 'Enable Administration Meta Boxes', $this->l10n_prefix ); ?></th>
 				<td>
 			<?php
 			foreach ( (array) $meta_items as $key => $val ) {
