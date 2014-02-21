@@ -2,8 +2,8 @@
 /*
 Plugin Name: Toggle Meta Boxes Sitewide
 Plugin URI: http://wordpress.org/extend/plugins/toggle-meta-boxes-sitewide/
-Version: 3.8.1
-Description: WP3.8.1 multisite network mu-plugin. Go to Network-->Settings to "Enable Administration Meta Boxes". Meta boxes(post, page, link, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links. Toggle to Restrict Comment Editing to Editor+ roles. SuperAdmin comments can only be edited by a SuperAdmin.
+Version: 3.8.1.1
+Description: WP3.7.1 multisite network mu-plugin. Go to Network-->Settings to "Enable Administration Meta Boxes". Meta boxes(post, page, link, and dashboard) are unchecked and disabled by default. Extra options to toggle the Quick Edit buttons, Media buttons, Screen Options and Help links. Toggle to Restrict Comment Editing to Editor+ roles. SuperAdmin comments can only be edited by a SuperAdmin.
 Author: D Sader
 Author URI: http://dsader.snowotherway.org
 Network: true
@@ -44,7 +44,14 @@ class ds_meta {
 
 
 	function ds_localization_init() {
-		load_plugin_textdomain( 'toggle-meta-boxes-sitewide', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		// Localization toggle-meta-boxes-sitewide-es_ES.po
+//		load_plugin_textdomain( 'toggle-meta-boxes-sitewide', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+
+				load_plugin_textdomain( 
+					$this->l10n_prefix,                        // Plugin text domain reference
+					false,                                     // Abspath - deprecated parameter - leave as false
+					dirname( plugin_basename( __FILE__ ) ) . '/languages/'  // Path to translation files
+				);
 	}
 
 	function ds_nav_menu_manage_columns($array) {
@@ -281,6 +288,9 @@ class ds_meta {
 	function ds_network_admin_restrict_comment_editing( $caps, $cap, $user_id, $args ) {
 		$menu_perms = get_site_option( "menu_items" );
 
+		if( !isset($menu_perms[ 'super_admin_mb' ] ) && is_super_admin()) 
+		return $caps;
+
 		if( isset($menu_perms[ 'comment_edit' ]) ) {
 
 			if ( 'edit_comment' == $cap ) {
@@ -297,8 +307,9 @@ class ds_meta {
 
     function ds_remove_comment_edit($actions, $comment) {
 		$menu_perms = get_site_option( "menu_items" );
+
 		if( !isset($menu_perms[ 'super_admin_mb' ] ) && is_super_admin()) 
-		return;
+        return $actions;
 		
 		if( isset($menu_perms[ 'comment_edit' ]) ) {
 
