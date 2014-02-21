@@ -36,9 +36,9 @@ This section describes how to install the plugin and get it working.
 1. Meta Box Network->Settings: Enable Administration Meta Boxes
 
 == Changelog ==
-= 3.8.1 =
-* Tested up to: WP 3.8.1, localization ready
+= 3.8.1.1 =
+* Tested up to: WP 3.8.1, localization ready, comment editing fix
 
 == Upgrade Notice ==
-= 3.8.1 = 
-* Tested up to: WP 3.8.1, localization ready
+= 3.8.1.1 = 
+* Tested up to: WP 3.8.1, localization ready, comment editing fix
