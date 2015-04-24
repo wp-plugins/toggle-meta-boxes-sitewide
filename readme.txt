@@ -3,7 +3,7 @@ Contributors: dsader
 Donate link: http://dsader.snowotherway.org
 Tags: dashboard, network, multisite, toggle meta boxes, edit form, edit, media buttons, quick edit,
 Requires at least: 3.8.1
-Tested up to: 3.8.1
+Tested up to: 4.2
 Stable tag: Trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
