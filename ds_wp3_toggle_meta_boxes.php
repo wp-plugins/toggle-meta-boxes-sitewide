@@ -251,29 +251,71 @@ class ds_meta {
  	if( !isset($menu_perms[ 'contextual_help_link' ]) ) 
 	 	echo '<style>#contextual-help-link-wrap { display: none;}</style>';
 	// Quick Edit
- 	//disable quickedit in post rows
- 	if( !isset($menu_perms[ 'quick_edit_posts' ]) ) 
-		add_filter('post_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2); 
+ 	
+	//disable quickedit in post rows
+	if( !isset($menu_perms[ 'quick_edit_posts' ]) ) {
+		add_filter('post_row_actions', 
+		function ($actions, $post) {
+            unset($actions["inline hide-if-no-js"]);
+            return $actions;
+        }, 10, 2);
+	}
+		
  	//disable quickedit in page rows
- 	if( !isset($menu_perms[ 'quick_edit_pages' ]) ) 
-		add_filter('page_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
+ 	if( !isset($menu_perms[ 'quick_edit_pages' ]) ) {
+		add_filter('page_row_actions', 
+		function ($actions, $post) {
+            unset($actions["inline hide-if-no-js"]);
+            return $actions;
+		}, 10, 2);
+	}
 
  	//disable quickedit in any tag rows
- 	if( !isset($menu_perms[ 'quick_edit_tag' ]) ) 
-		add_filter('tag_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
+ 	if( !isset($menu_perms[ 'quick_edit_tag' ]) ) {
+		add_filter('tag_row_actions', 
+		function ($actions, $post) {
+            unset($actions["inline hide-if-no-js"]);
+            return $actions;
+		}, 10, 2);
+	}
+	
  	//disable quickedit in taxonomy=post_tag rows
- 	if( !isset($menu_perms[ 'quick_edit_post_tag' ]) ) 
-		add_filter('post_tag_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
+ 	if( !isset($menu_perms[ 'quick_edit_post_tag' ]) ) {
+		add_filter('post_tag_row_actions', 
+		function ($actions, $post) {
+            unset($actions["inline hide-if-no-js"]);
+            return $actions;
+		}, 10, 2);
+	}
+
  	//disable quickedit in taxonomy=category rows
- 	if( !isset($menu_perms[ 'quick_edit_category' ]) ) 
-		add_filter('category_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
+ 	if( !isset($menu_perms[ 'quick_edit_category' ]) ) {
+		add_filter('category_row_actions', 
+		function ($actions, $post) {
+            unset($actions["inline hide-if-no-js"]);
+            return $actions;
+		}, 10, 2);
+	}
+
 	//disable quickedit in taxonomy=link_category rows
-	if( !isset($menu_perms[ 'quick_edit_link_category' ]) ) 
-		add_filter('link_category_row_actions', create_function('$actions, $post', 'unset($actions["inline hide-if-no-js"]); return $actions ;'), 10, 2);
+	if( !isset($menu_perms[ 'quick_edit_link_category' ]) ) {
+		add_filter('link_category_row_actions', 
+		function ($actions, $post) {
+            unset($actions["inline hide-if-no-js"]);
+            return $actions;
+		}, 10, 2);
+	}
 
 	//disable quickedit in comment rows
-	if( !isset($menu_perms[ 'quick_edit_comments' ]) ) 
-		add_filter('comment_row_actions', create_function('$actions, $post', 'unset($actions["quickedit"]); return $actions ;'), 10, 2);
+	if( !isset($menu_perms[ 'quick_edit_comments' ]) ) { 
+		add_filter('comment_row_actions', 
+		function ($actions, $post) {
+			unset($actions["quickedit"]); 
+			return $actions;
+		}, 10, 2);
+	}
+
+
 	// Media Buttons
 	if( !isset($menu_perms[ 'media_buttons' ]) ) 
 	 	remove_action( 'media_buttons', 'media_buttons' );
